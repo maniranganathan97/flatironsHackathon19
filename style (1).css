@@ -1,0 +1,184 @@
+@charset "ISO-8859-1"
+
+
+
+.upicon {
+    background-color: #68B92B;
+    color: #FFFFFF;
+    width: 41px;
+    height: 15px;
+    float: left;
+    margin-top: 5px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    text-decoration: none;
+    -moz-border-radius: 3px;
+    border-radius: 4px 4px 4px 4px;
+    -webkit-border-radius: 3px;
+}
+
+.whole-body{
+	width: 100%;
+	height:100%;
+	
+}
+.tabletr
+{
+	background-image: url(data:image/gif;base64,R0lGODlhBAAEAIAAAP////Dw8CH5BAAAAAAALAAAAAAEAAQAAAIFjHEZaAUAOw==);
+    background-color: #F0F0F0;
+    height: 24px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    line-height: 16px;
+    color: #12B;
+    font-weight: 400;
+    font-style: normal;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -khtml-border-radius: 6px;
+    border-radius: 6px;
+    margin: 1px;
+    padding: 5px 0 1px 8px;
+}
+
+.serverdata {
+    width: 98%;
+    margin: 0;
+}
+
+
+.titlediv {
+    background-color: #1F8DD6;
+    color: #FFF;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    margin-bottom: 4px;
+    position: relative;
+    border-radius: 4px 4px 4px 4px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    padding: 10px;
+
+}
+
+.Online img  {
+  float: right;
+}
+.hero
+{
+height: 100vh;
+width:100%;
+background-image: url(D:/Workspace/Car/WebContent/images/sky.jpg);
+background-size: cover;
+background-position: center;
+position:relative;
+overflow-x:hidden; 
+}
+
+.highway {
+	height: 200px;
+	width:500%;
+	display:block;
+	background-image:url(D:/Workspace/Car/WebContent/images/road.jpg);
+	position:absolute;
+	bottom:0;
+	left:0;
+	right:0;
+	z-index:1;
+	background-repeat:repeat-x;
+	animation:highway 5s linear infinite;
+	}
+	@keyframes highway
+	{
+	100%{
+	transform: translateX(-3400px);
+	}
+}
+.city{
+    height: 250px;
+	width:500%;
+	display:block;
+	background-image:url(D:/Workspace/Car/WebContent/images/city.png);
+	position:absolute;
+	bottom:200px;
+	left:0;
+	right:0;
+	z-index:1;
+	background-repeat:repeat-x;
+	animation:city 20s linear infinite;
+	}
+	@keyframes city
+	{
+	100%{
+	transform: translateX(-1400px);
+	}
+}	
+.car
+{
+	width: 400px;
+	left:50%;
+	bottom: 100px;
+	transform:translate(-50%);
+	position:absolute;
+	z-index: 2;
+}
+
+.car img
+{
+	width: 100%;
+	animation:car 1s linear infinite;
+}
+
+@keyframes car
+{
+	100%{
+	transform: translateY(-1px);
+	}
+	50%{
+	transform: translateY(1px);
+	}
+	0%{
+	transform: translateY(-1px);
+	}
+}
+
+.wheel{
+	left:50%;
+	bottom: 178px;
+	transform:translateX(-50%);
+	position:absolute;
+	z-index:2;
+	
+}
+
+.wheel img
+{
+	width:72px;
+	height: 72px;
+	animation: wheel 2s  linear infinite;
+
+}
+
+.back-wheel
+{
+	left:-165px;
+	position: absolute;
+}
+.front-wheel
+{
+	left:80px;
+	position: absolute;
+}
+
+@keyframes wheel
+{
+	100%{
+	   transform: rotate(360deg);
+	}
+	
+}
+
+
+	
