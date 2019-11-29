@@ -8,8 +8,24 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
 
 <script>
+
+var app = angular.module('myApp', []);
+app.controller('customersCtrl', function($scope) {
+  console.log("controll here");
+    $scope.names = [ ];
+    $scope.envs=["QA","DEV","TEST","STAGE"];
+    $scope.getData=function(){
+  console.log("url data--->",$scope.urlData)
+  console.log("Get selected option----->",$scope.selectEnv)
+  var obj = {url:$scope.urlData,env:$scope.selectEnv};
+  $scope.names.push(obj);
+  console.log("ALl DAta",$scope.names);
+}
+    
+});
 function onLoadCall(url){
     var request = new XMLHttpRequest();
     var d = new Date();
@@ -30,38 +46,60 @@ console.log("1")
 request.open("GET", url +"?time="+currentTime);
 request.send(null);
 }
+
+
 </script>
+
+
 </head>
 <!-- <body onload="javascript:onLoadCall('https://ba-stage-pp7.aviationzone.net/pinpoint')"> -->
   <body>
+      <div ng-app="myApp" ng-controller="customersCtrl"> 
 <div class="container">
   <div class="titlediv">Server Status Check</div>
 
   <h2>Add Url Here!</h2>
   <div class="section1">
     <div id="inputUrl">
-      <input type="text" class="form-control" placeholder="Enter Url" aria-label="Server Url" aria-describedby="basic-addon2">
+      <input type="text" ng-model="urlData" class="form-control" placeholder="Enter Url" aria-label="Server Url" aria-describedby="basic-addon2">
     </div>
     <div id="envDropdown">
        <div class="input-group mb-3">
           <div class="input-group-append">
                    <div class="dropdown">
-                       <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                         ENVIRONMENT
-                       </button>
-                       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                         <a class="dropdown-item" href="#">DEV</a>
-                         <a class="dropdown-item" href="#">QC</a>
-                         <a class="dropdown-item" href="#">TEST</a>
-                         <a class="dropdown-item" href="#">STAGE</a>
-                       </div>
-                     </div>
+                       <select 
+                       ng-model="selectEnv"
+                       ng-options="item for item in envs"
+                       ng-init="selectEnv=envs[0]"
+                       >
+
+                       </select>
               </div>
           </div>
       </div>
   
-       <button class="btn btn-outline-secondary" type="button">Button</button>
+       <button class="btn btn-outline-secondary" type="button" ng-click="getData()">Button</button>
   </div>
+
+  
+  
+      <table>
+        <th>
+          <tr>
+            <td>S No</td>
+            <td>ENV</td>
+            <td>URL</td>
+            <td>Status</td>
+          </tr>
+        </th>
+        <tr ng-repeat="x in names">
+          <td>{{$index + 1}}</td>
+          <td>{{ x.env }}</td>
+          <td>{{ x.url }}</td>
+        </tr>
+      </table>
+      
+      </div>
  
   
 </div>
