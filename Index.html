@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BA SERVER STATUS</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<script>
+function onLoadCall(url){
+    var request = new XMLHttpRequest();
+    var d = new Date();
+var currentTime = d.getMilliseconds();
+    // var currentTime =n
+request.onreadystatechange=function(){
+  if (request.readyState==4){
+    console.log("2")
+      if(request.status==200){
+        alert("Success");
+      } else {
+        alert(request.status);
+      }   
+    // To get the response use request.responseText;
+  }
+}
+console.log("1")
+request.open("GET", url +"?time="+currentTime);
+request.send(null);
+}
+</script>
+</head>
+<!-- <body onload="javascript:onLoadCall('https://ba-stage-pp7.aviationzone.net/pinpoint')"> -->
+  <body>
+<div class="container">
+  <div class="titlediv">Server Status Check</div>
+
+  <h2>Add Url Here!</h2>
+  <div class="section1">
+    <div id="inputUrl">
+      <input type="text" class="form-control" placeholder="Enter Url" aria-label="Server Url" aria-describedby="basic-addon2">
+    </div>
+    <div id="envDropdown">
+       <div class="input-group mb-3">
+          <div class="input-group-append">
+                   <div class="dropdown">
+                       <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                         ENVIRONMENT
+                       </button>
+                       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                         <a class="dropdown-item" href="#">DEV</a>
+                         <a class="dropdown-item" href="#">QC</a>
+                         <a class="dropdown-item" href="#">TEST</a>
+                         <a class="dropdown-item" href="#">STAGE</a>
+                       </div>
+                     </div>
+              </div>
+          </div>
+      </div>
+  
+       <button class="btn btn-outline-secondary" type="button">Button</button>
+  </div>
+ 
+  
+</div>
+
+</body>
+</html>
