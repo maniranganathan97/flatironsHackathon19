@@ -9,6 +9,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 <script>
 
@@ -21,12 +22,9 @@ app.controller('customersCtrl', function($scope) {
   console.log("url data--->",$scope.urlData)
   console.log("Get selected option----->",$scope.selectEnv)
   var obj = {url:$scope.urlData,env:$scope.selectEnv};
-  $scope.names.push(obj);
+  
   console.log("ALl DAta",$scope.names);
-}
-    
-});
-function onLoadCall(url){
+  
     var request = new XMLHttpRequest();
     var d = new Date();
 var currentTime = d.getMilliseconds();
@@ -35,20 +33,75 @@ request.onreadystatechange=function(){
   if (request.readyState==4){
     console.log("2")
       if(request.status==200){
-        alert("Success");
+        $scope.res="suceess";
+        obj.status="success";
+        // obj.image=<img src="circle-16.ico"/>;
+        var isDuplicate = $scope.names.find((x)=>{$scope.urlData==x.url});
+        console.log("IsDuplicated------------->",isDuplicate);
+        $scope.names.push(obj);
       } else {
-        alert(request.status);
+        // alert(request.status);
+        $scope.res="fail";
+        obj.status="fail";
+        $scope.names.push(obj);
       }   
     // To get the response use request.responseText;
   }
 }
 console.log("1")
-request.open("GET", url +"?time="+currentTime);
+request.open("GET", $scope.urlData +"?time="+currentTime);
 request.send(null);
-}
+  
+// var status = onLoadCall($scope.urlData);
+// console.log("Status----->",$scope.res);
 
+}
+    
+});
+// function onLoadCall(url){
+//     var request = new XMLHttpRequest();
+//     var d = new Date();
+// var currentTime = d.getMilliseconds();
+//     // var currentTime =n
+// request.onreadystatechange=function(){
+//   if (request.readyState==4){
+//     console.log("2")
+//       if(request.status==200){
+//         alert("Success");
+//       } else {
+//         alert(request.status);
+//       }   
+//     // To get the response use request.responseText;
+//   }
+// }
+// console.log("1")
+// request.open("GET", url +"?time="+currentTime);
+// request.send(null);
+// }
+function showTableData() {
+        document.getElementById('info').innerHTML = "";
+        var myTab = document.getElementById('tableData');
+        var myData=[];
+
+        // LOOP THROUGH EACH ROW OF THE TABLE AFTER HEADER.
+        for (i = 1; i < myTab.rows.length; i++) {
+
+            // GET THE CELLS COLLECTION OF THE CURRENT ROW.
+            var objCells = myTab.rows.item(i).cells;
+
+            // LOOP THROUGH EACH CELL OF THE CURENT ROW TO READ CELL VALUES.
+            for (var j = 0; j < objCells.length; j++) {
+                info.innerHTML = info.innerHTML + ' ' + objCells.item(j).innerHTML;
+                var obj = objCells.item(j).innerHTML;
+                myData.push(obj);
+            }
+            info.innerHTML = info.innerHTML + '<br />';     // ADD A BREAK (TAG).
+        }
+        console.log("Cell data--------->",myData);
+    }
 
 </script>
+
 
 
 </head>
@@ -60,14 +113,15 @@ request.send(null);
 
   <h2>Add Url Here!</h2>
   <div class="section1">
+      <form action="addname" method="post">
     <div id="inputUrl">
-      <input type="text" ng-model="urlData" class="form-control" placeholder="Enter Url" aria-label="Server Url" aria-describedby="basic-addon2">
+      <input type="text" name="url" ng-model="urlData" class="form-control" placeholder="Enter Url" aria-label="Server Url" aria-describedby="basic-addon2">
     </div>
-    <div id="envDropdown">
+    <div  id="envDropdown">
        <div class="input-group mb-3">
           <div class="input-group-append">
                    <div class="dropdown">
-                       <select 
+                       <select name="env"
                        ng-model="selectEnv"
                        ng-options="item for item in envs"
                        ng-init="selectEnv=envs[0]"
@@ -78,27 +132,35 @@ request.send(null);
           </div>
       </div>
   
-       <button class="btn btn-outline-secondary" type="button" ng-click="getData()">Button</button>
+       <button class="btn btn-outline-secondary" type="button" ng-click="getData()">Add</button>
+      </form>
   </div>
+     
 
+  <!-- <form action="addname" method="post"> -->
   
-  
-      <table>
-        <th>
+      <table name="tableData" id="tableData">
+       
           <tr>
-            <td>S No</td>
-            <td>ENV</td>
-            <td>URL</td>
-            <td>Status</td>
+            <th>S No</th>
+            <th>ENV</th>
+            <th>URL</th>
+            <th>Status</th>
           </tr>
-        </th>
+        
         <tr ng-repeat="x in names">
           <td>{{$index + 1}}</td>
-          <td>{{ x.env }}</td>
-          <td>{{ x.url }}</td>
+          <td id="env">{{ x.env }}</td>
+          <td id="url">{{ x.url }}</td>
+          <!-- <td>{{ x.image }}</td> -->
+          <td ><img ng-src="{{x.status == 'success' && 'green.ico' || 'red.ico'}}"/></td>
+          <!-- <td><button ng-click="test()">Status</button></td> -->
         </tr>
       </table>
-      
+    
+      <button onclick="showTableData()" >Save Data</button>
+    <!-- </form> -->
+    <p id="info"></p>
       </div>
  
   
