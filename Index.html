@@ -111,17 +111,22 @@ function showTableData() {
 <div class="container">
   <div class="titlediv">Server Status Check</div>
 
-  <h2>Add Url Here!</h2>
+   <h2 style= "text-shadow: 2px 2px blue;">ADD URL HERE!!</h2>
   <div class="section1">
       <form action="addname" method="post">
     <div id="inputUrl">
-      <input type="text" name="url" ng-model="urlData" class="form-control" placeholder="Enter Url" aria-label="Server Url" aria-describedby="basic-addon2">
+	<div class="input-group mb-3">
+  <input type="text" name="url" ng-model="urlData" class="form-control" placeholder="Enter Server Url" aria-label="Recipient's username" aria-describedby="basic-addon2">
+  
+  </div>
+</div>
+      
     </div>
     <div  id="envDropdown">
        <div class="input-group mb-3">
           <div class="input-group-append">
                    <div class="dropdown">
-                       <select name="env"
+                       <select class="custom-select" name="env"
                        ng-model="selectEnv"
                        ng-options="item for item in envs"
                        ng-init="selectEnv=envs[0]"
@@ -131,24 +136,27 @@ function showTableData() {
               </div>
           </div>
       </div>
+	  <div class="addbutton">
   
-       <button class="btn btn-outline-secondary" type="button" ng-click="getData()">Add</button>
+       <button class="btn btn-success" type="button" ng-click="getData()">Add</button>
+	   </div>
       </form>
   </div>
      
 
   <!-- <form action="addname" method="post"> -->
   
-      <table name="tableData" id="tableData">
-       
+      <table class="table table-bordered table-hover " name="tableData" id="tableData">
+        <thead class="thead-dark">
           <tr>
             <th>S No</th>
             <th>ENV</th>
             <th>URL</th>
             <th>Status</th>
           </tr>
-        
-        <tr ng-repeat="x in names">
+		   </thead>
+          <tbody>
+        <tr  class="table-info" ng-repeat="x in names">
           <td>{{$index + 1}}</td>
           <td id="env">{{ x.env }}</td>
           <td id="url">{{ x.url }}</td>
@@ -156,9 +164,11 @@ function showTableData() {
           <td ><img ng-src="{{x.status == 'success' && 'green.ico' || 'red.ico'}}"/></td>
           <!-- <td><button ng-click="test()">Status</button></td> -->
         </tr>
+		 </tbody>
       </table>
     
-      <button onclick="showTableData()" >Save Data</button>
+      <button class="btn btn-primary" onclick="showTableData()" >Save Data</button>
+	  
     <!-- </form> -->
     <p id="info"></p>
       </div>

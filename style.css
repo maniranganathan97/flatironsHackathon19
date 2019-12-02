@@ -18,7 +18,7 @@
 
 body{margin: 10px; background-color:#dadfeb;}
 
-.container{width: 1170px;margin: 30px auto;background-color:#fff;}
+.container{width: 1170px;margin: 30px auto;background-color:#ceebfd;}
 
 
 .section1
@@ -26,18 +26,11 @@ body{margin: 10px; background-color:#dadfeb;}
 {
     width: 100%;
 }
-/* .form-control{
-    width:50%;
-} */
 
-.input-group{
-    width: 30% !important;
-    margin: 0px !important;
-}
-
-#inputUrl
+.addbutton
 {
-    width: 48%;
+	padding:10px;
+	width:0px;
 }
 
 #envDropdown{
