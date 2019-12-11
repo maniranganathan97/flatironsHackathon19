@@ -12,18 +12,187 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 <script>
+  let datas ={};
+  $(document).ready(function(){
+   
+  });
 
+  function generateDynamicTable(){
+    
+    $.ajax({
+          type:"GET",
+          url:"http://localhost:3000/notes",
+          data:{
+    "title" : "test-v2",
+    "content" : "simple-v2"
+},
+          success: function(data){
+            console.log("Dats from db------>",data);
+            datas=data;
+            // console.log("Dats from db------>",datas);
+            // alert("suceess");
+            console.log("generate Table here"+datas.length);
+            var noOfContacts = datas.length;
+		
+		if(noOfContacts>0){
+				// CREATE DYNAMIC TABLE.
+        var table = document.createElement("table");
+			table.style.width = '50%';
+			table.setAttribute('border', '1');
+			table.setAttribute('cellspacing', '0');
+			table.setAttribute('cellpadding', '5');
+			
+			// retrieve column header ('Name', 'Email', and 'Mobile')
+ 
+			var col = []; // define an empty array
+			for (var i = 0; i < noOfContacts; i++) {
+				for (var key in datas[i]) {
+					if (col.indexOf(key) === -1) {
+						col.push(key);
+					}
+				}
+			}
+			
+			// CREATE TABLE HEAD .
+			var tHead = document.createElement("thead");	
+				
+			
+			// CREATE ROW FOR TABLE HEAD .
+			var hRow = document.createElement("tr");
+			
+			// ADD COLUMN HEADER TO ROW OF TABLE HEAD.
+			for (var i = 0; i < col.length; i++) {
+        if(i==0) {continue;}
+					var th = document.createElement("th");
+					th.innerHTML = col[i].toUpperCase();
+					hRow.appendChild(th);
+			}
+			tHead.appendChild(hRow);
+			table.appendChild(tHead);
+			
+			// CREATE TABLE BODY .
+			var tBody = document.createElement("tbody");	
+			
+			// ADD COLUMN HEADER TO ROW OF TABLE HEAD.
+			for (var i = 0; i < noOfContacts; i++) {
+        if(i==0) {continue;}
+			
+					var bRow = document.createElement("tr"); // CREATE ROW FOR EACH RECORD .
+					
+					
+					for (var j = 0; j < col.length; j++) {
+            if(j==0) {continue;}
+            var td = document.createElement("td");
+            
+            td.innerHTML = datas[i][col[j]];
+            
+           
+            // bRow.appendChild(chk);
+						bRow.appendChild(td);
+          }
+          var chkbox = document.createElement('input');
+          chkbox.type = "checkbox";
+          chkbox.id = "chk" ;
+          chkbox.name = "chk" ;
+            bRow.appendChild(chkbox);
+					tBody.appendChild(bRow)
+ 
+			}
+			table.appendChild(tBody);	
+			
+			
+			// FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
+			var divContainer = document.getElementById("myContacts");
+			divContainer.innerHTML = "";
+			divContainer.appendChild(table);
+			
+		}	
+          },
+          fail:function(){
+            alert("Fail");
+          }
+        },3000);
+        console.log("Dats from db------>",datas);
+    
+
+  }
+  function GetSelected() {
+        //Reference the Table.
+        var grid = document.getElementById("myContacts");
+ 
+        //Reference the CheckBoxes in Table.
+        var checkBoxes = grid.getElementsByTagName("INPUT");
+        var message = "Id Name                  Country\n";
+        var deleteData =[];
+        var rowData={};
+        //Loop through the CheckBoxes.
+        for (var i = 0; i < checkBoxes.length; i++) {
+            if (checkBoxes[i].checked) {
+                var row = checkBoxes[i].parentNode;
+                
+                message += row.cells[1].innerHTML;
+                rowData.urlName=row.cells[0].innerHTML;
+                rowData.environment = row.cells[1].innerHTML;
+                deleteData.push(rowData);
+                message += "   " + row.cells[2].innerHTML;
+                message += "   " + row.cells[3].innerHTML;
+                message += "\n";
+            }
+        }
+console.log("These data will be deleted------->",deleteData);
+        $.ajax({
+          type:"DELETE",
+          url:"http://localhost:3000/notes",
+          data:rowData ,
+          success: function(rowData  ){
+            console.log("Dats from db------>",data);
+
+            
+            alert("delete suceess");
+          },
+          fail:function(){
+            alert("delete Fail");
+          }
+        });
+ 
+        //Display selected Row data in Alert Box.
+        alert(message);
+    }
 var app = angular.module('myApp', []);
-app.controller('customersCtrl', function($scope) {
+app.controller('customersCtrl', function($scope,$interval) {
   console.log("controll here");
-    $scope.names = [ ];
-    $scope.envs=["QA","DEV","TEST","STAGE"];
-    $scope.getData=function(){
-  console.log("url data--->",$scope.urlData)
-  console.log("Get selected option----->",$scope.selectEnv)
-  var obj = {url:$scope.urlData,env:$scope.selectEnv};
+  $scope.isDuplicate=false;
+  $scope.isUrl=true;
+    
+        $scope.names = [ ];
+        $scope.envs=["QA","DEV","TEST","STAGE"];
+        $scope.getData=function(){
+      console.log("url data--->",$scope.urlData)
+      console.log("Get selected option----->",$scope.selectEnv)
+      var obj = {url:$scope.urlData,env:$scope.selectEnv};
+
+      var re = /^(http[s]?:\/\/){0,1}(www\.){0,1}[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,5}[\.]{0,1}/;
+        if (!re.test($scope.urlData)) { 
+            alert("url error");
+            return ;
+        }
   
-  console.log("ALl DAta",$scope.names);
+  console.log("ALl DAta",datas);
+  for (let i = 0; i < datas.length; i++) {
+        if (datas[i].urlName === $scope.urlData && datas[i].environment === $scope.selectEnv) {
+          console.log("it will return here");
+          alert("Duplicate Data");
+          return;
+        }
+        console.log("outside");
+      }
+// console.log("IS DUPLICATED------------>",$scope.isDuplicate);
+//   if(checkDuplicate($scope,$scope.urlData,$scope.selectEnv) || $scope.isDuplicate){
+//     console.log("IS DUPLICATED INSIDE IF------------>",$scope.isDuplicate);
+//     return;
+//   }
+//   console.log("IS DUPLICATED INSIDE IF------------>",$scope.isDuplicate);
+  
   
     var request = new XMLHttpRequest();
     var d = new Date();
@@ -35,14 +204,14 @@ request.onreadystatechange=function(){
       if(request.status==200){
         $scope.res="suceess";
         obj.status="success";
-        // obj.image=<img src="circle-16.ico"/>;
-        var isDuplicate = $scope.names.find((x)=>{$scope.urlData==x.url});
-        console.log("IsDuplicated------------->",isDuplicate);
         $scope.names.push(obj);
+        updateHere($scope.urlData,$scope.selectEnv,"success");
+        
       } else {
         // alert(request.status);
         $scope.res="fail";
         obj.status="fail";
+        updateHere($scope.urlData,$scope.selectEnv,"fail")
         $scope.names.push(obj);
       }   
     // To get the response use request.responseText;
@@ -54,6 +223,16 @@ request.send(null);
   
 // var status = onLoadCall($scope.urlData);
 // console.log("Status----->",$scope.res);
+var xmlhttp = new XMLHttpRequest(),
+  method = 'GET',
+  url = 'https://developer.mozilla.org/';
+
+xmlhttp.open(method, url, true);
+xmlhttp.onload = function () {
+  // Do something with the retrieved data ( found in xmlhttp.response )
+  console.log("testes-------->")
+};
+xmlhttp.send();
 
 }
     
@@ -78,6 +257,115 @@ request.send(null);
 // request.open("GET", url +"?time="+currentTime);
 // request.send(null);
 // }
+function checkDuplicate($scope,url, env){
+  console.log("Check Duplicate Method!",url,env);
+  $.ajax({
+          type:"GET",
+          url:"http://localhost:3000/notes",
+          success: function(data  ){
+            console.log("Dats from db------>",data);
+            for(let i=0;i<data.length;i++){
+              if(data[i].urlName === url && data[i].environment === env){
+                $scope.isDuplicate= true;
+                return;
+              }
+            }
+            $scope.isDuplicate= false;
+            // getStatusUpdate(data[data.length-1]._id,data[data.length-1].urlName,data[data.length-1].status);
+            // alert("suceess");
+          },
+          fail:function(){
+            // alert("Fail");
+          }
+        });
+}
+function updateHere(url , env, status){
+  console.log("url_________",url);
+  console.log("ENV__________",env);
+  console.log("STAUS_______",status);
+  $.ajax({
+          type:"POST",
+          url:"http://localhost:3000/notes",
+          data:{
+            "url" : url,
+            "env" : env,
+            "status":status
+           } ,
+          success: function(data  ){
+            console.log("Dats from db------>",data);
+
+           
+            alert("suceess");
+          },
+          fail:function(){
+            alert("Fail");
+          }
+        });
+}
+function refreshData(){
+
+  $.ajax({
+          type:"GET",
+          url:"http://localhost:3000/notes",
+          success: function(data  ){
+            console.log("Dats from db------>",data[data.length-1]);
+            getStatusUpdate(data[data.length-1]._id,data[data.length-1].urlName,data[data.length-1].status);
+            alert("suceess");
+          },
+          fail:function(){
+            alert("Fail");
+          }
+        });
+
+}
+function getStatusUpdate(id,url,status){
+  console.log("Status update here",url,status);
+  var request = new XMLHttpRequest();
+    var d = new Date();
+var currentTime = d.getMilliseconds();
+    
+request.onreadystatechange=function(){
+  if (request.readyState==4){
+    console.log("2 update");
+      if(request.status==200){
+       
+        console.log("update suceess");
+        updateSingleData(id,url,"success")
+      } else {
+       
+        console.log("update fail");
+        updateSingleData(id,url,"fail")
+      }   
+   
+  }
+}
+console.log("1 update");
+request.open("GET", url +"?time="+currentTime);
+request.send(null);
+}
+function updateSingleData(id,url,status){
+  console.log("updateSingleData");
+  var data = {
+                urlName: url,
+                status: status
+            }
+            console.log("the data will be updated like this---->",data);
+  $.ajax({
+          type:"PUT",
+
+          url:"http://localhost:3000/notes/"+id,
+          data:data,
+          success: function(data  ){
+            console.log("update single data------>",data);
+            // getStatusUpdate(data[data.length-1].urlName,data[data.length-1].status);
+            // alert("suceess");
+          },
+          fail:function(){
+            // alert("Fail");
+            console.log("update single data failed!");
+          }
+        });
+}
 function showTableData() {
         document.getElementById('info').innerHTML = "";
         var myTab = document.getElementById('tableData');
@@ -92,12 +380,34 @@ function showTableData() {
             // LOOP THROUGH EACH CELL OF THE CURENT ROW TO READ CELL VALUES.
             for (var j = 0; j < objCells.length; j++) {
                 info.innerHTML = info.innerHTML + ' ' + objCells.item(j).innerHTML;
-                var obj = objCells.item(j).innerHTML;
-                myData.push(obj);
+                
+                if(j==2){
+                  var obj ={};
+                  obj.index=objCells.item(0).innerHTML;
+                  obj.env=objCells.item(1).innerHTML;
+                  obj.url=objCells.item(2).innerHTML;
+                  myData.push(obj);
+                }
+               
             }
             info.innerHTML = info.innerHTML + '<br />';     // ADD A BREAK (TAG).
         }
         console.log("Cell data--------->",myData);
+        $.ajax({
+          type:"GET",
+          url:"http://localhost:3000/notes",
+          data:{
+    "title" : "test-v2",
+    "content" : "simple-v2"
+},
+          success: function(data){
+            console.log("Dats from db------>",data);
+            alert("suceess");
+          },
+          fail:function(){
+            alert("Fail");
+          }
+        });
     }
 
 </script>
@@ -170,11 +480,19 @@ function showTableData() {
       <button class="btn btn-primary" onclick="showTableData()" >Save Data</button>
 	  
     <!-- </form> -->
-    <p id="info"></p>
+    <p id="info">{{counter}}</p>
       </div>
  
   
 </div>
 
 </body>
+<button onClick="refreshData()">Refresh</button>
+
+<body onload="generateDynamicTable()">
+    <div id="myContacts">
+              <p>You have zero contacts</p>
+            </div>
+            <input type="button" value="Get Selected" onclick="GetSelected()" />
+    </body>
 </html>
